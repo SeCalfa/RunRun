@@ -38,7 +38,7 @@ public class Player : MonoBehaviour, IPlayer
         _startPlayerPosition = transform.position;
         _startCameraPosition = Camera.main.transform.position;
 
-        addScore += ScoreAdd; // Подписка на событие
+        addScore += ScoreAdd; // Event subscription
     }
 
     private void FixedUpdate()
@@ -61,7 +61,14 @@ public class Player : MonoBehaviour, IPlayer
         }
     }
 
-    private void ScoreAdd() => _score++;
+    private void ScoreAdd()
+    {
+        _score++;
+        if(_score > PlayerPrefs.GetInt("MaxScore"))
+        {
+
+        }
+    }
 
     public void Tap()
     {
