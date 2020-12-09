@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Save : MonoBehaviour
 {
+
+
     private void Awake()
     {
         if (!PlayerPrefs.HasKey("MaxScore"))

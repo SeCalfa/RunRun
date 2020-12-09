@@ -18,19 +18,16 @@ public class Player : MonoBehaviour, IPlayer
     private Vector3 _startPlayerPosition, _startCameraPosition;
 
     internal int _score = 0;
+    internal bool canMove = false;
 
     public delegate void AddScore();
     public event AddScore addScore;
+    public delegate void FirstTap();
+    public event FirstTap firstTap;
 
-    public Spawner GetSpawner
-    {
-        get { return spawner; }
-    }
+    public Spawner GetSpawner { get { return spawner; } }
 
-    private void Awake()
-    {
-        player = this;
-    }
+    private void Awake() => player = this;
 
     private void Start()
     {
@@ -63,23 +60,25 @@ public class Player : MonoBehaviour, IPlayer
 
     private void ScoreAdd()
     {
-        _score++;
         if(_score > PlayerPrefs.GetInt("MaxScore"))
-        {
+            PlayerPrefs.SetInt("MaxScore", _score);
+        _score += 1;
 
-        }
+        if (_score % 10 == 0)
+            _speed += 0.1f;
     }
 
     public void Tap()
     {
         if (Input.touchCount > 0)
         {
-            if (Input.GetTouch(0).phase == TouchPhase.Began && !_isRunStarted)
+            if (Input.GetTouch(0).phase == TouchPhase.Began && !_isRunStarted && canMove)
             {
                 _direction = spawner.GetFirstPlatform._random ? _leftDir : _rightDir;
                 _isRunStarted = true;
+                firstTap.Invoke();
             }
-            else if (Input.GetTouch(0).phase == TouchPhase.Began && _isRunStarted)
+            else if (Input.GetTouch(0).phase == TouchPhase.Began && _isRunStarted && canMove)
             {
                 if (_direction == _leftDir)
                     _direction = _rightDir;
@@ -88,12 +87,13 @@ public class Player : MonoBehaviour, IPlayer
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.Mouse0) && !_isRunStarted)
+        if(Input.GetKeyDown(KeyCode.Mouse0) && !_isRunStarted && canMove)
         {
             _direction = spawner.GetFirstPlatform._random ? _leftDir : _rightDir;
             _isRunStarted = true;
+            firstTap.Invoke();
         }
-        else if (Input.GetKeyDown(KeyCode.Mouse0) && _isRunStarted)
+        else if (Input.GetKeyDown(KeyCode.Mouse0) && _isRunStarted && canMove)
         {
             if (_direction == _leftDir)
                 _direction = _rightDir;
@@ -114,16 +114,16 @@ public class Player : MonoBehaviour, IPlayer
         if (Physics.Raycast(_laser1.position, -Vector3.up, out hit1, 200))
         {
             if (hit1.distance > 2)
-                SceneManager.LoadScene("SampleScene");
+                LoseGame();
         }
 
         if (Physics.Raycast(_laser2.position, -Vector3.up, out hit2, 200))
         {
             if (hit2.distance > 2)
-                SceneManager.LoadScene("SampleScene");
+                LoseGame();
         }
     }
 
 
-    private void LoseGame() => print("You lost");
+    private void LoseGame() => SceneManager.LoadScene("SampleScene");
 }
