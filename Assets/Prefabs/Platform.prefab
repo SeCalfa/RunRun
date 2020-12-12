@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 4280859672954621175}
   - component: {fileID: 4280859672954621172}
   - component: {fileID: 4927272194456118080}
+  - component: {fileID: 3415035316103388695}
   m_Layer: 0
   m_Name: Platform
   m_TagString: Untagged
@@ -143,6 +144,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sp1: {fileID: 2237906139630774993}
   sp2: {fileID: 4694914957443766160}
+--- !u!111 &3415035316103388695
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4280859672954621173}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 605b092f72ca1a14ba3eecb1fd420e87, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 605b092f72ca1a14ba3eecb1fd420e87, type: 2}
+  - {fileID: 7400000, guid: 662c24b74d640c64db2f98721b2a43d5, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &5604853041206212217
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,7 +219,7 @@ Transform:
   m_GameObject: {fileID: 6484231285383441921}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2, z: 0}
-  m_LocalScale: {x: 0.5, y: 3, z: 0.5}
+  m_LocalScale: {x: 1, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 4280859672954621169}
   m_RootOrder: 2

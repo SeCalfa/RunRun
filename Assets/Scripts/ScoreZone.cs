@@ -7,14 +7,7 @@ public class ScoreZone : MonoBehaviour
     [SerializeField] private bool isStarterBlock = false;
     [SerializeField] private GameObject platform = null;
 
-    private float _speed = 4;
-    private bool _isPlatformDown = false;
-
-    private void FixedUpdate()
-    {
-        if (_isPlatformDown)
-            platform.transform.Translate(-platform.transform.up * _speed * Time.fixedDeltaTime);
-    }
+    public GameObject GetPlatform { get { return platform; } }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -28,7 +21,8 @@ public class ScoreZone : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            _isPlatformDown = true;
+            platform.GetComponent<Animation>().clip = platform.GetComponent<Animation>().GetClip("PlatformDisappear");
+            platform.GetComponent<Animation>().Play();
         }
     }
 }

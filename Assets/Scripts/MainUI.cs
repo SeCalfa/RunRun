@@ -9,11 +9,14 @@ public class MainUI : MonoBehaviour
     [SerializeField] private Text currentScoreText = null;
     [SerializeField] private Text maxScoreText = null;
     [SerializeField] private Text tapToPlay = null;
+    [SerializeField] private Text TapText = null;
     [SerializeField] private Image levelBarFG = null;
     [SerializeField] private Image fade = null;
 
     private float _barOffset = 0;
     private float _fadeAlpha = 0;
+
+    public Text GetTapText { get { return TapText; } }
 
     private void Start()
     {
@@ -22,11 +25,14 @@ public class MainUI : MonoBehaviour
         Player.player.firstTap += FirstTap; // Event subscription
         maxScoreText.text = PlayerPrefs.GetInt("MaxScore").ToString();
         _barOffset = 1 / (float)PlayerPrefs.GetInt("MaxScore");
+        TapText.gameObject.SetActive(false);
     }
 
     private void OnScoreAdd()
     {
         currentScoreText.text = Player.player._score.ToString();
+        currentScoreText.GetComponent<Animation>().Stop();
+        currentScoreText.GetComponent<Animation>().Play();
 
         if (Player.player._score < PlayerPrefs.GetInt("MaxScore"))
         {

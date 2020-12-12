@@ -5,4 +5,5 @@ interface IPlayer
     void CameraMove();
     void Tap();
     void RayCasting();
+    void TapMode();
 }
