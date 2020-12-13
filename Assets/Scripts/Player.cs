@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour, IPlayer
 {
+    #region Fields/Properties
+
     public static Player player; // Player singelton
 
     [SerializeField] private Spawner spawner = null;
@@ -16,7 +18,7 @@ public class Player : MonoBehaviour, IPlayer
     private Vector3 _leftDir = new Vector3(-1, 0, 0), _rightDir = new Vector3(0, 0, 1);
     private float _speed = 2;
     private bool _isRunStarted = false;
-    private Vector3 _startPlayerPosition, _startCameraPosition, _startCameraRotation;
+    private Vector3 _startCameraPosition, _startCameraRotation;
     private Vector3 _cameraRightDirectionPos = new Vector3(0, 9.3f, -4), _cameraLeftDirectionPos = new Vector3(4, 9.3f, 0);
     private Vector3 _cameraRightDirectionRot = new Vector3(50, 350, 0), _cameraLeftDirectionRot = new Vector3(50, 280, 0);
     private float cameraLerpAlpha = 0;
@@ -33,12 +35,15 @@ public class Player : MonoBehaviour, IPlayer
 
     public Spawner GetSpawner { get { return spawner; } }
 
+    #endregion
+
+    #region MonoBehaviour Events
+
     private void Awake() => player = this;
 
     private void Start()
     {
         _playerRB = GetComponent<Rigidbody>();
-        _startPlayerPosition = transform.position;
         _startCameraPosition = Camera.main.transform.localPosition;
         _startCameraRotation = Camera.main.transform.localRotation.eulerAngles;
 
@@ -53,9 +58,7 @@ public class Player : MonoBehaviour, IPlayer
 
     private void Update()
     {
-        Tap();
         RayCasting();
-        CameraMove();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -76,61 +79,32 @@ public class Player : MonoBehaviour, IPlayer
         }
     }
 
-    private void ScoreAdd()
-    {
-        if(_score > PlayerPrefs.GetInt("MaxScore"))
-            PlayerPrefs.SetInt("MaxScore", _score);
-        _score += 1;
+    #endregion
 
-        if (_score % 10 == 0)
-            _speed += 0.05f;
-    }
+    #region Interface Implementation
 
     public void Tap()
     {
-        if (Input.touchCount > 0)
-        {
-            if (Input.GetTouch(0).phase == TouchPhase.Began && !_isRunStarted && canMove)
-            {
-                _direction = spawner.GetFirstPlatform._random ? _leftDir : _rightDir;
-                _isRunStarted = true;
-                firstTap.Invoke();
-            }
-            else if (Input.GetTouch(0).phase == TouchPhase.Began && _isRunStarted && canMove)
-            {
-                if (_direction == _leftDir)
-                    _direction = _rightDir;
-                else
-                    _direction = _leftDir;
-            }
-            else if (Input.GetTouch(0).phase == TouchPhase.Began && _isRunStarted && canMove && isTappingOn)
-            {
-                addScore.Invoke();
-            }
-        }
-
-        if(Input.GetKeyDown(KeyCode.Mouse0) && !_isRunStarted && canMove && !isTappingOn)
+        if (!_isRunStarted && canMove && !isTappingOn)
         {
             _direction = spawner.GetFirstPlatform._random ? _leftDir : _rightDir;
             _isRunStarted = true;
             firstTap.Invoke();
         }
-        else if (Input.GetKeyDown(KeyCode.Mouse0) && _isRunStarted && canMove && !isTappingOn)
+        else if (_isRunStarted && canMove && !isTappingOn)
         {
             if (_direction == _leftDir)
                 _direction = _rightDir;
             else
                 _direction = _leftDir;
         }
-        else if (Input.GetKeyDown(KeyCode.Mouse0) && _isRunStarted && canMove && isTappingOn)
+        else if (_isRunStarted && canMove && isTappingOn)
         {
             addScore.Invoke();
         }
     }
 
     public void Move() => _playerRB.MovePosition(transform.position + _direction * _speed * Time.fixedDeltaTime);
-
-    public void CameraMove() { } // => Camera.main.transform.position = transform.position - _startPlayerPosition + _startCameraPosition;
 
     public void RayCasting()
     {
@@ -149,8 +123,6 @@ public class Player : MonoBehaviour, IPlayer
                 LoseGame();
         }
     }
-
-    private void LoseGame() => SceneManager.LoadScene("SampleScene");
 
     public void TapMode()
     {
@@ -178,4 +150,19 @@ public class Player : MonoBehaviour, IPlayer
             Camera.main.transform.localRotation = cameraRotation;
         }
     }
+
+    #endregion
+
+    private void ScoreAdd()
+    {
+        if(_score > PlayerPrefs.GetInt("MaxScore"))
+            PlayerPrefs.SetInt("MaxScore", _score);
+        _score += 1;
+
+        if (_score % 10 == 0)
+            _speed += 0.05f;
+    }
+
+    private void LoseGame() => SceneManager.LoadScene("SampleScene");
+
 }
