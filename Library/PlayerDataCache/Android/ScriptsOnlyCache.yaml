@@ -861,5 +861,4 @@ ScriptsOnlyBuild:
   platform: 13
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/User/Desktop/UnityProjects_Resources/GyperCasual/CompiledProject/Run
-    Run.apk
+  playerPath: C:/Users/User/Desktop/UnityProjects_Resources/GyperCasual/CompiledProject/TapTap.aab
